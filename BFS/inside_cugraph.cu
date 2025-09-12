@@ -13,14 +13,24 @@ __global__ void bfs_kernel(int* row_ptr, int* col_ind, int* distances,
     }
 }
 
-// cuGraph BFS is based on GPU frontier expansion (level-synchronous BFS).
+// Classical CPU BFS → queue + level-by-level traversal.
 
-// It uses the Gunrock-style advance + filter primitives.
+// cuGraph BFS:
 
-// Each “frontier” of vertices expands neighbors in parallel using CSR (Compressed Sparse Row) representation.
+// Uses a frontier-based approach in parallel.
 
-// Warp-centric load balancing is applied to avoid divergence.
+// Graph stored in CSR (compressed sparse row).
 
-// Uses CUDA kernels over adjacency lists stored in device_uvector<int>.
+// At each iteration:
 
-// Complexity: O(V+E) but massively parallelized.
+    // Expand current frontier (all vertices discovered at previous level).
+
+    // Fetch their neighbors in parallel using CSR row offsets.
+
+    // Filter out already visited nodes (bitmap in GPU memory).
+
+    // Write next frontier.
+
+// Uses parallel prefix-sum (scan) for fast frontier construction.
+
+// Optimization: Warp-based neighbor exploration + load balancing.

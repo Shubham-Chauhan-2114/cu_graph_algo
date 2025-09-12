@@ -1,5 +1,15 @@
-// Implemented using label propagation + BFS/union-find hybrids.
+// Classical Dijkstra = priority queue → not GPU-friendly.
 
-// For weakly connected components: BFS-based propagation.
+// cuGraph Dijkstra:
 
-// For strongly connected components: uses parallel graph condensation.
+    // Implemented using a Δ-stepping algorithm (bucket-based relaxation).
+
+    // Vertices are grouped into buckets by distance range.
+
+    // Each bucket processed in parallel.
+
+    // Relax edges (u → v) with atomicMin on distance array.
+
+    // Uses parallel frontier expansion, similar to BFS but with weights.
+
+// Much faster than CPU due to warp-parallel edge relaxations.

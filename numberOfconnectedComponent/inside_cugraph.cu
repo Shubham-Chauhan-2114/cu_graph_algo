@@ -1,5 +1,21 @@
-// Implemented using label propagation + BFS/union-find hybrids.
+// Two main variants in cuGraph:
 
-// For weakly connected components: BFS-based propagation.
+// Weakly Connected Components (WCC):
 
-// For strongly connected components: uses parallel graph condensation.
+    // Implemented with parallel label propagation.
+
+    // Each vertex starts with its own ID.
+
+    // Iteratively updates vertex label to minimum of itself and its neighbors.
+
+    // Uses parallel min-reductions until convergence.
+
+    // Optimized with atomicMin operations in CUDA.
+
+// Strongly Connected Components (SCC):
+
+    // Based on parallel Kosaraju/Tarjan-like methods.
+
+    // Leverages BFS/DFS sweeps on the graph and its transpose.
+
+    // Uses GPU-level graph condensation.
